@@ -7,39 +7,45 @@ type Pizza = {
 }
 
 type Order = {
-    id: number
+    id: number | null
     pizza: Pizza
     status: OrderStatus
 }
 
-const menu: Pizza[] = [
-    {id: 1, name: "Margherita", price: 8},
-    {id: 2, name: "Pepperoni", price: 10},
-    {id: 3, name: "Hawaiian", price: 7},
-    {id: 4, name: "Veggie", price: 14},
-]
+let cashInRegister: number = 100;
+let nextOrderId: number = 1;
+let nextPizzaId: number = 1;
 
-let cashInRegister = 100;
-let orderId = 5;
+const menu: Pizza[] = [
+    {id: nextPizzaId++, name: "Margherita", price: 8},
+    {id: nextPizzaId++, name: "Pepperoni", price: 10},
+    {id: nextPizzaId++, name: "Hawaiian", price: 7},
+    {id: nextPizzaId++, name: "Veggie", price: 14},
+]
 
 const orderQueue: Order[] = []
 
+const addToArray = <T> (array: T[], item: T) => {
+    array.push(item)
+
+    return array
+}
+
 // utility function "addNewPizza" that takes a pizza object and adds it to the menu
-const addNewPizza = (pizza: Pizza) => {
-    const pizzaInMenuIndex = menu.findIndex(x => x.name === pizza.name)
-
-    if (pizzaInMenuIndex !== -1) {
-        menu[pizzaInMenuIndex] = pizza
-
-        return
+const addNewPizza = (pizza: Omit<Pizza, "id">): Pizza => {
+    const newPizza: Pizza = {
+        id: nextPizzaId++,
+        ...pizza
     }
 
-    menu.push(pizza)
+    menu.push(newPizza)
+
+    return newPizza;
 }
 
 // utility function to place order that takes a pizza name parameter
-const placeOrder = (pizzaName: string) => {
-    const pizza = getPizzaDetail(pizzaName);
+const placeOrder = (pizzaName: string): Order | undefined => {
+    const pizza: Pizza = getPizzaDetail(pizzaName);
 
     if (!pizza) {
         console.error('We don\'t sell that pizza.');
@@ -49,19 +55,20 @@ const placeOrder = (pizzaName: string) => {
 
     cashInRegister += pizza.price;
 
-    const newOrder: Order = {pizza, id: orderId, status: "ordered"};
-    orderId++;
+    const newOrder: Order = {pizza, id: nextOrderId++, status: "ordered"};
     orderQueue.push(newOrder);
 
     return newOrder;
 }
 
 // utility function completeOrder
-const completeOrder = (orderId: number) => {
+const completeOrder = (orderId: number): Order | undefined => {
     const selectedOrder: Order | null = orderQueue.find(x => x.id === orderId);
 
     if (!selectedOrder) {
         console.error(`${orderId} was not found`)
+
+        return;
     }
 
     if (selectedOrder.status !== "completed") {
@@ -71,7 +78,7 @@ const completeOrder = (orderId: number) => {
     return selectedOrder;
 }
 
-const getPizzaDetail = (identifier: string | number) => {
+const getPizzaDetail = (identifier: string | number): Pizza | undefined => {
     if (typeof identifier === "string") {
         return menu.find(pizza => pizza.name.toLowerCase() == identifier.toLowerCase())
     } else if (typeof identifier === "number") {
@@ -82,16 +89,17 @@ const getPizzaDetail = (identifier: string | number) => {
 }
 
 console.log("Before", menu);
-addNewPizza({id: 5, name: "Chicken Salami", price: 9});
-addNewPizza({id: 6, name: "Chicken Bacon Ranch", price: 14});
-addNewPizza({id: 7, name: "Spicy Sausage", price: 12});
-addNewPizza({id: 8, name: "BBQ Chicken", price: 11});
+addNewPizza({name: "Chicken Salami", price: 9});
+addNewPizza({name: "Chicken Bacon Ranch", price: 14});
+addNewPizza({name: "Spicy Sausage", price: 12});
+addToArray<Pizza>(menu, {id: nextPizzaId++, name: "BBQ Chicken", price: 11})
 console.log("After", menu);
 
 console.log("=======================================");
 
 console.log("Before", orderQueue);
 placeOrder("Chicken Salami");
+addToArray<Order>(orderQueue, {id: nextOrderId++, pizza: menu[2], status: "ordered"})
 console.log("After", orderQueue);
 
 console.log("=======================================");
@@ -99,3 +107,7 @@ console.log("=======================================");
 console.log("Before", orderQueue);
 completeOrder(1);
 console.log("After", orderQueue);
+
+console.log("=======================================");
+
+console.log("Total Cash", cashInRegister);
