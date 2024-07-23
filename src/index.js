@@ -16,11 +16,7 @@ var addNewPizza = function (pizza) {
     }
     menu.push(pizza);
 };
-// utility function to place order that takes a pizza name parameter and
-// 1. finds the pizza in menu
-// 2. adds income in cashInRegister
-// 3. pushes new order object into orderQueue
-// 4. returns the new order object { pizza: pizzaObject, status: "ordered"}
+// utility function to place order that takes a pizza name parameter
 var placeOrder = function (pizzaName) {
     var pizza = menu.find(function (x) { return x.name === pizzaName; });
     if (!pizza) {
@@ -36,7 +32,10 @@ var placeOrder = function (pizzaName) {
 // utility function completeOrder
 var completeOrder = function (orderId) {
     var selectedOrder = orderQueue.find(function (x) { return x.id === orderId; });
-    if (selectedOrder && selectedOrder.status !== "completed") {
+    if (!selectedOrder) {
+        console.error("".concat(orderId, " was not found"));
+    }
+    if (selectedOrder.status !== "completed") {
         selectedOrder.status = "completed";
     }
     return selectedOrder;

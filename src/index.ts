@@ -1,8 +1,12 @@
-// Pizza Object type
-
 type Pizza = {
     name: string
     price: number
+}
+
+type Order = {
+    id: number
+    pizza: Pizza
+    status: string
 }
 
 const menu = [
@@ -15,7 +19,7 @@ const menu = [
 let cashInRegister = 100;
 let orderId = 1;
 
-const orderQueue = []
+const orderQueue: Order[] = []
 
 // utility function "addNewPizza" that takes a pizza object and adds it to the menu
 const addNewPizza = (pizza: Pizza) => {
@@ -53,7 +57,11 @@ const placeOrder = (pizzaName: string) => {
 const completeOrder = (orderId: number) => {
     const selectedOrder = orderQueue.find(x => x.id === orderId);
 
-    if (selectedOrder && selectedOrder.status !== "completed") {
+    if (!selectedOrder) {
+        console.error(`${orderId} was not found`)
+    }
+
+    if (selectedOrder.status !== "completed") {
         selectedOrder.status = "completed";
     }
 
