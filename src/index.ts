@@ -1,4 +1,5 @@
 type Pizza = {
+    id: number
     name: string
     price: number
 }
@@ -11,15 +12,15 @@ type Order = {
     status: OrderStatus
 }
 
-const menu = [
-    {name: "Margherita", price: 8},
-    {name: "Pepperoni", price: 10},
-    {name: "Hawaiian", price: 7},
-    {name: "Veggie", price: 14},
+const menu: Pizza[] = [
+    {id: 1, name: "Margherita", price: 8},
+    {id: 2, name: "Pepperoni", price: 10},
+    {id: 3, name: "Hawaiian", price: 7},
+    {id: 4, name: "Veggie", price: 14},
 ]
 
 let cashInRegister = 100;
-let orderId = 1;
+let orderId = 5;
 
 const orderQueue: Order[] = []
 
@@ -57,7 +58,7 @@ const placeOrder = (pizzaName: string) => {
 
 // utility function completeOrder
 const completeOrder = (orderId: number) => {
-    const selectedOrder = orderQueue.find(x => x.id === orderId);
+    const selectedOrder: Order | null = orderQueue.find(x => x.id === orderId);
 
     if (!selectedOrder) {
         console.error(`${orderId} was not found`)
@@ -71,10 +72,10 @@ const completeOrder = (orderId: number) => {
 }
 
 console.log("Before", menu);
-addNewPizza({name: "Chicken Salami", price: 9});
-addNewPizza({name: "Chicken Bacon Ranch", price: 14});
-addNewPizza({name: "Spicy Sausage", price: 12});
-addNewPizza({name: "BBQ Chicken", price: 11});
+addNewPizza({id: 5, name: "Chicken Salami", price: 9});
+addNewPizza({id: 6, name: "Chicken Bacon Ranch", price: 14});
+addNewPizza({id: 7, name: "Spicy Sausage", price: 12});
+addNewPizza({id: 8, name: "BBQ Chicken", price: 11});
 console.log("After", menu);
 
 console.log("=======================================");
