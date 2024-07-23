@@ -1,3 +1,10 @@
+// Pizza Object type
+
+type Pizza = {
+    name: string
+    price: number
+}
+
 const menu = [
     {name: "Margherita", price: 8},
     {name: "Pepperoni", price: 10},
@@ -11,7 +18,7 @@ let orderId = 1;
 const orderQueue = []
 
 // utility function "addNewPizza" that takes a pizza object and adds it to the menu
-const addNewPizza = (pizza) => {
+const addNewPizza = (pizza: Pizza) => {
     const pizzaInMenuIndex = menu.findIndex(x => x.name === pizza.name)
 
     if (pizzaInMenuIndex !== -1) {
@@ -23,12 +30,8 @@ const addNewPizza = (pizza) => {
     menu.push(pizza)
 }
 
-// utility function to place order that takes a pizza name parameter and
-// 1. finds the pizza in menu
-// 2. adds income in cashInRegister
-// 3. pushes new order object into orderQueue
-// 4. returns the new order object { pizza: pizzaObject, status: "ordered"}
-const placeOrder = (pizzaName) => {
+// utility function to place order that takes a pizza name parameter
+const placeOrder = (pizzaName: string) => {
     const pizza = menu.find(x => x.name === pizzaName);
 
     if (!pizza) {
@@ -47,7 +50,7 @@ const placeOrder = (pizzaName) => {
 }
 
 // utility function completeOrder
-const completeOrder = (orderId) => {
+const completeOrder = (orderId: number) => {
     const selectedOrder = orderQueue.find(x => x.id === orderId);
 
     if (selectedOrder && selectedOrder.status !== "completed") {
