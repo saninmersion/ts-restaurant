@@ -1,10 +1,10 @@
+type OrderStatus = "ordered" | "completed" | "cancelled"
+
 type Pizza = {
     id: number
     name: string
     price: number
 }
-
-type OrderStatus = "ordered" | "completed" | "cancelled"
 
 type Order = {
     id: number
@@ -39,7 +39,7 @@ const addNewPizza = (pizza: Pizza) => {
 
 // utility function to place order that takes a pizza name parameter
 const placeOrder = (pizzaName: string) => {
-    const pizza = menu.find(x => x.name === pizzaName);
+    const pizza = getPizzaDetail(pizzaName);
 
     if (!pizza) {
         console.error('We don\'t sell that pizza.');
@@ -69,6 +69,16 @@ const completeOrder = (orderId: number) => {
     }
 
     return selectedOrder;
+}
+
+const getPizzaDetail = (identifier: string | number) => {
+    if (typeof identifier === "string") {
+        return menu.find(pizza => pizza.name.toLowerCase() == identifier.toLowerCase())
+    } else if (typeof identifier === "number") {
+        return menu.find(pizza => pizza.id == identifier)
+    } else {
+        throw new Error('Parameter identifier needs to be string or a number.')
+    }
 }
 
 console.log("Before", menu);
