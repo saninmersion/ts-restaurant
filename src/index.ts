@@ -3,10 +3,12 @@ type Pizza = {
     price: number
 }
 
+type OrderStatus = "ordered" | "completed" | "cancelled"
+
 type Order = {
     id: number
     pizza: Pizza
-    status: string
+    status: OrderStatus
 }
 
 const menu = [
@@ -46,7 +48,7 @@ const placeOrder = (pizzaName: string) => {
 
     cashInRegister += pizza.price;
 
-    const newOrder = {pizza, id: orderId, status: "ordered"};
+    const newOrder: Order = {pizza, id: orderId, status: "ordered"};
     orderId++;
     orderQueue.push(newOrder);
 
